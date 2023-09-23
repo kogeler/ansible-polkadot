@@ -46,7 +46,6 @@ jobs:
   deploy-galaxy:
     uses: ./.github/workflows/reusable-check-version.yml
     with:
-      api-token: "${{ secrets.GALAXY_API_KEY }}"
       environment: production
 #  deploy-galaxy:
 #    runs-on: ubuntu-22.04

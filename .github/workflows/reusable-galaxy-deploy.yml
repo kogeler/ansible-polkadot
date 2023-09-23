@@ -1,9 +1,6 @@
 on:
   workflow_call:
     inputs:
-      api-token:
-        required: true
-        type: string
       environment:
         required: true
         type: string
@@ -31,7 +28,7 @@ jobs:
       - name: Print Ansible version
         run: ansible --version
       - name: Save API token
-        run: echo '${{ inputs.api-token }}' > api-token
+        run: echo '${{ secrets.GALAXY_API_KEY }}' > api-token
       - name: Build collection
         run: ansible-galaxy collection build "${{ github.repository }}"
       - name: Publish  collection
