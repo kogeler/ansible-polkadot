@@ -10,13 +10,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #role-names: [node, ws_health_exporter]
-        role-names: [ws_health_exporter]
-        #molecule-drivers: [docker, lxd]
-        molecule-drivers: [docker]
+        role-names: [node, ws_health_exporter]
+        molecule-drivers: [docker, lxd]
         # We test the latest version and minimum supported version
-        #ansible-versions: [5.0.1, 8.4.0]
-        ansible-versions: [8.4.0]
+        ansible-versions: [5.0.1, 8.4.0]
     uses: ./.github/workflows/reusable-molecule.yml
     with:
       role-name: ${{ matrix.role-names }}
@@ -47,18 +44,23 @@ jobs:
                 sha: context.sha
             })
   deploy-galaxy:
-    runs-on: ubuntu-22.04
+    uses: ./.github/workflows/reusable-check-version.yml
     environment: production
-    needs: [create-git-tag]
-    steps:
-      - name: test secret
-        run: echo "${{ secrets.GALAXY_API_KEY }}"
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          path: "${{ github.repository }}"
-      - name: Build and Deploy Collection
-        uses: artis3n/ansible_galaxy_collection@v2
-        with:
-          api_key: "${{ secrets.GALAXY_API_KEY }}"
-          collection_dir: "${{ github.repository }}"
+    with:
+      api-token: "${{ secrets.GALAXY_API_KEY }}"
+#  deploy-galaxy:
+#    runs-on: ubuntu-22.04
+#    environment: production
+#    needs: [create-git-tag]
+#    steps:
+#      - name: test secret
+#        run: echo "${{ secrets.GALAXY_API_KEY }}"
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          path: "${{ github.repository }}"
+#      - name: Build and Deploy Collection
+#        uses: artis3n/ansible_galaxy_collection@v2
+#        with:
+#          api_key: "${{ secrets.GALAXY_API_KEY }}"
+#          collection_dir: "${{ github.repository }}"
