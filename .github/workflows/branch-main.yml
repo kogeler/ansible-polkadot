@@ -26,6 +26,7 @@ jobs:
       compare-versions: false
   create-git-tag:
     runs-on: ubuntu-22.04
+    environment: production
     needs: [run-molecule-tests, check-version]
     env:
       CURRENT_GALAXY_VERSION: ${{ needs.check-version.outputs.current-galaxy-version }}
@@ -33,6 +34,8 @@ jobs:
       - name: Print tag version
         run: | 
           echo "Tag version: ${CURRENT_GALAXY_VERSION}"
+      - name: test secret
+        run: echo "${{ secrets.GALAXY_API_KEY }}"
       - name: Create Tag
         uses: actions/github-script@v6
         with:
@@ -49,4 +52,4 @@ jobs:
     environment: production
     uses: artis3n/ansible_galaxy_collection@v2
     with:
-      api_key: '${{ secrets.GALAXY_API_KEY }}'
+      api_key: "${{ secrets.GALAXY_API_KEY }}"
