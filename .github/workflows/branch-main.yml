@@ -48,19 +48,3 @@ jobs:
     uses: ./.github/workflows/reusable-galaxy-deploy.yml
     secrets:
       api-token: ${{ secrets.GALAXY_API_KEY }}
-#  deploy-galaxy:
-#    runs-on: ubuntu-22.04
-#    environment: production
-#    needs: [create-git-tag]
-#    steps:
-#      - name: test secret
-#        run: echo "${{ secrets.GALAXY_API_KEY }}"
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#        with:
-#          path: "${{ github.repository }}"
-#      - name: Build and Deploy Collection
-#        uses: artis3n/ansible_galaxy_collection@v2
-#        with:
-#          api_key: "${{ secrets.GALAXY_API_KEY }}"
-#          collection_dir: "${{ github.repository }}"
