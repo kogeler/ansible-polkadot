@@ -43,7 +43,7 @@ jobs:
 #                ref: `refs/tags/${CURRENT_GALAXY_VERSION}`,
 #                sha: context.sha
 #            })
-  deploy-galaxy:
+  galaxy-deploy:
 #    needs: [create-git-tag]
     uses: ./.github/workflows/reusable-galaxy-deploy.yml
     with:
