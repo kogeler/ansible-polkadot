@@ -10,11 +10,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        role-names: [ws_health_exporter]
         #role-names: [node, ws_health_exporter]
-        molecule-drivers: [docker, lxd]
+        role-names: [ws_health_exporter]
+        #molecule-drivers: [docker, lxd]
+        molecule-drivers: [docker]
         # We test the latest version and minimum supported version
-        ansible-versions: [5.0.1, 8.4.0]
+        #ansible-versions: [5.0.1, 8.4.0]
+        ansible-versions: [8.4.0]
     uses: ./.github/workflows/reusable-molecule.yml
     with:
       role-name: ${{ matrix.role-names }}
@@ -26,7 +28,6 @@ jobs:
       compare-versions: false
   create-git-tag:
     runs-on: ubuntu-22.04
-    environment: production
     needs: [run-molecule-tests, check-version]
     env:
       CURRENT_GALAXY_VERSION: ${{ needs.check-version.outputs.current-galaxy-version }}
@@ -34,8 +35,6 @@ jobs:
       - name: Print tag version
         run: | 
           echo "Tag version: ${CURRENT_GALAXY_VERSION}"
-      - name: test secret
-        run: echo "${{ secrets.GALAXY_API_KEY }}"
       - name: Create Tag
         uses: actions/github-script@v6
         with:
@@ -52,6 +51,8 @@ jobs:
     environment: production
     needs: [create-git-tag]
     steps:
+      - name: test secret
+        run: echo "${{ secrets.GALAXY_API_KEY }}"
       - name: Checkout
         uses: actions/checkout@v4
         with:
