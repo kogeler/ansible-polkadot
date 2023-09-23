@@ -44,3 +44,9 @@ jobs:
                 ref: `refs/tags/${CURRENT_GALAXY_VERSION}`,
                 sha: context.sha
             })
+  deploy-galaxy:
+    needs: [create-git-tag]
+    environment: production
+    uses: artis3n/ansible_galaxy_collection@v2
+    with:
+      api_key: '${{ secrets.GALAXY_API_KEY }}'
