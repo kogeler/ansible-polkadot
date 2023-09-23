@@ -26,10 +26,10 @@ jobs:
         run: pip3 install --no-cache-dir PyYAML==5.3.1 ansible==${{ inputs.ansible-version }} yq
       - name: Print Ansible version
         run: ansible --version
-      - name: Save API token
-        run: echo '${{ secrets.api-token }}' > api-token
       - name: Build collection
         run: ansible-galaxy collection build "${{ github.repository }}"
+      - name: Save API token
+        run: echo '${{ secrets.api-token }}' > api-token
       - name: Publish  collection
         run: |
           GALAXY_NAMESPACE=$(cat ${GITHUB_REPOSITORY}/galaxy.yml | yq -r '.namespace' | tr -d '\n')
