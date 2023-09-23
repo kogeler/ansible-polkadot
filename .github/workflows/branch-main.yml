@@ -23,27 +23,28 @@ jobs:
     uses: ./.github/workflows/reusable-check-version.yml
     with:
       compare-versions: false
-  create-git-tag:
-    runs-on: ubuntu-22.04
-    needs: [run-molecule-tests, check-version]
-    env:
-      CURRENT_GALAXY_VERSION: ${{ needs.check-version.outputs.current-galaxy-version }}
-    steps:
-      - name: Print tag version
-        run: | 
-          echo "Tag version: ${CURRENT_GALAXY_VERSION}"
-      - name: Create Tag
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const {CURRENT_GALAXY_VERSION} = process.env          
-            github.rest.git.createRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                ref: `refs/tags/${CURRENT_GALAXY_VERSION}`,
-                sha: context.sha
-            })
+#  create-git-tag:
+#    runs-on: ubuntu-22.04
+#    needs: [run-molecule-tests, check-version]
+#    env:
+#      CURRENT_GALAXY_VERSION: ${{ needs.check-version.outputs.current-galaxy-version }}
+#    steps:
+#      - name: Print tag version
+#        run: |
+#          echo "Tag version: ${CURRENT_GALAXY_VERSION}"
+#      - name: Create Tag
+#        uses: actions/github-script@v6
+#        with:
+#          script: |
+#            const {CURRENT_GALAXY_VERSION} = process.env
+#            github.rest.git.createRef({
+#                owner: context.repo.owner,
+#                repo: context.repo.repo,
+#                ref: `refs/tags/${CURRENT_GALAXY_VERSION}`,
+#                sha: context.sha
+#            })
   deploy-galaxy:
+#    needs: [create-git-tag]
     uses: ./.github/workflows/reusable-galaxy-deploy.yml
     with:
       environment: production
