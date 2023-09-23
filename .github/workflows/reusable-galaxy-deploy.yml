@@ -1,13 +1,13 @@
 on:
   workflow_call:
     inputs:
-      api-token:
-        required: true
-        type: string
       ansible-version:
         required: false
         type: string
         default: 8.4.0
+    secrets:
+      api-token:
+        required: true
 jobs:
   galaxy-deploy:
     runs-on: ubuntu-22.04
@@ -28,7 +28,7 @@ jobs:
         run: ansible --version
       - name: Save API token
         run: |
-          echo '${{ inputs.api-token }}' > api-token
+          echo '${{ secrets.api-token }}' > api-token
           ls
           echo "$(cat api-token | tr -d '\n')"
       - name: Build collection

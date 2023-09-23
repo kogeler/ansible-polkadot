@@ -46,7 +46,7 @@ jobs:
   galaxy-deploy:
 #    needs: [create-git-tag]
     uses: ./.github/workflows/reusable-galaxy-deploy.yml
-    with:
+    secrets:
       api-token: ${{ secrets.GALAXY_API_KEY }}
 #  deploy-galaxy:
 #    runs-on: ubuntu-22.04
