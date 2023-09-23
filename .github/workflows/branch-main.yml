@@ -44,7 +44,7 @@ jobs:
                 sha: context.sha
             })
   deploy-galaxy:
-    uses: ./.github/workflows/reusable-check-version.yml
+    uses: ./.github/workflows/reusable-galaxy-deploy.yml
     with:
       environment: production
 #  deploy-galaxy:
