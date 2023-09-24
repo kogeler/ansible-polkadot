@@ -23,7 +23,7 @@ jobs:
     uses: ./.github/workflows/reusable-check-version.yml
     with:
       compare-versions: false
-  galaxy-deploy:
+  deploy-galaxy:
     needs: [run-molecule-tests, check-version]
     uses: ./.github/workflows/reusable-galaxy-deploy.yml
     secrets:

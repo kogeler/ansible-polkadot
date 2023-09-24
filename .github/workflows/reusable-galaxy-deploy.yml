@@ -9,7 +9,7 @@ on:
       api-token:
         required: true
 jobs:
-  galaxy-deploy:
+  deploy-galaxy:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -22,10 +22,13 @@ jobs:
           python-version: '3.x'
       - name: Setup Python modules
         # PyYAML==5.3.1 fixes the 'The license_file parameter is deprecated, use license_files instead.' error
-        # 5.4.1 version still has the issue
+        # the 5.4.1 version still has the issue
         run: pip3 install --no-cache-dir PyYAML==5.3.1 ansible==${{ inputs.ansible-version }} yq
       - name: Print Ansible version
         run: ansible --version
+      # https://github.com/ansible/galaxy/issues/2438
+      - name: create README.md in the role folder
+        run: touch "${{ github.repository }}/roles/README.md"
       - name: Build collection
         run: ansible-galaxy collection build "${{ github.repository }}"
       - name: Save API token
