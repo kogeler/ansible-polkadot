@@ -20,6 +20,11 @@ node_prepare_worker_binary: ""
 node_execute_worker_binary: ""
 
 node_binary_download_private_token: "{{ gitlab_private_token | default(omit) }}"
+# Retry settings for downloading binaries and their GPG signatures from the release server.
+# They help to mitigate intermittent network/release-server failures (e.g. HTTP 504 Gateway Time-out from GitHub).
+# Number of attempts per file and the delay (in seconds) between them.
+node_binary_download_retries: 6
+node_binary_download_delay: 10
 # ID of the GPG public key used for signing the Polkadot binaries.
 node_binary_release_key_id: 9D4B2B6EB8F97156D19669A9FF0812D491B96798
 # GPG signature URL. When left empty, binary verification will not be executed.
@@ -243,6 +248,12 @@ node_parachain_database_wipe: false
 node_handler_id: ""
 # Start service after playbook execution is completed
 node_start_service: true
+
+### Health check
+# After the service is running the role polls the node's `system_health` RPC endpoint until it responds.
+# Number of attempts and the delay (in seconds) between them.
+node_health_check_retries: 120
+node_health_check_delay: 10
 
 ### File used for Ansible annotation
 # File name for prometheus node-exporter textfile collector

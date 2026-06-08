@@ -42,6 +42,10 @@
     headers:
       PRIVATE-TOKEN: "{{ node_binary_download_private_token }}"
   loop: "{{ _node_binaries }}"
+  register: _node_binary_download
+  until: _node_binary_download is succeeded
+  retries: "{{ node_binary_download_retries }}"
+  delay: "{{ node_binary_download_delay }}"
   check_mode: false
   changed_when: false
 
@@ -58,6 +62,10 @@
       changed_when: false
       loop: "{{ _node_binaries }}"
       when: item.signature_url != ''
+      register: _node_signature_download
+      until: _node_signature_download is succeeded
+      retries: "{{ node_binary_download_retries }}"
+      delay: "{{ node_binary_download_delay }}"
 
     - name: Binary | Import release GPG public key
       ansible.builtin.command: |
