@@ -32,8 +32,8 @@
         use_proxy: false
       register: _node_health_check_register
       until: _node_health_check_register.status is defined and _node_health_check_register.status == 200
-      retries: 12
-      delay: 10
+      retries: "{{ node_health_check_retries }}"
+      delay: "{{ node_health_check_delay }}"
       check_mode: false
       changed_when: false
 
